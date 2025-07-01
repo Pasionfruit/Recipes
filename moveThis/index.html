@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Cooks</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>AP Cooks</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="#categories">Categories</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="featured-recipes" class="recipe-grid">
+            <h2>Featured Recipes</h2>
+            <div class="recipes-container" id="recipesContainer"></div>
+        </section>
+
+        <section id="categories" class="categories">
+            <h2>Recipe Categories</h2>
+            <div class="category-grid">
+                <a href="#breakfast" class="category-card">Breakfast</a>
+                <a href="#lunch" class="category-card">Lunch</a>
+                <a href="#dinner" class="category-card">Dinner</a>
+                <a href="#desserts" class="category-card">Desserts</a>
+                <a href="#vegetarian" class="category-card">Vegetarian</a>
+                <a href="#vegan" class="category-card">Vegan</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Sharing the joy of cooking with delicious recipes from around the world.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Delicious Recipes. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Function to fetch all recipes from the API
+        async function fetchRecipes() {
+            try {
+                const response = await fetch('/api/recipes');
+                const recipes = await response.json();
+                displayRecipes(recipes);
+            } catch (error) {
+                console.error('Error fetching recipes:', error);
+            }
+        }
+
+        // Function to create and display recipe cards
+        function displayRecipes(recipes) {
+            const container = document.getElementById('recipesContainer');
+            container.innerHTML = ''; // Clear existing content
+
+            recipes.forEach(recipe => {
+                const article = document.createElement('article');
+                article.className = 'recipe-card';
+                
+                article.innerHTML = `
+                    <img src="${recipe.image}" alt="${recipe.name}">
+                    <div class="recipe-content">
+                        <h3>${recipe.name}</h3>
+                        <p>Prep Time: ${recipe.prepTime} | Cook Time: ${recipe.cookTime}</p>
+                        <a href="/recipes?id=${recipe._id}" class="btn">View Recipe</a>
+                    </div>
+                `;
+                
+                container.appendChild(article);
+            });
+        }
+
+        // Load recipes when the page loads
+        window.addEventListener('load', fetchRecipes);
+    </script>
+</body>
+</html>
